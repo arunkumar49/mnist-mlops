@@ -1,0 +1,27 @@
+[project]
+name = "mnist-mlops"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Arun Kumar", email = "khanaru308@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+]
+
+[project.scripts]
+mnist-mlops = "mnist_mlops:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+]
