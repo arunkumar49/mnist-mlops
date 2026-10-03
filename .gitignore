@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Secrets and local config - never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Data and models (tracked by DVC, not Git)
+/data/
+/models/
+*.npz
+*.onnx
+*.pt
+
+# MLflow local runs
+mlruns/
+mlartifacts/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*.auto.tfvars
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
