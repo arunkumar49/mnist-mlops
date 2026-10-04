@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mnist-mlops = "mnist_mlops:main"
+mnist-mlops = "mnist_mlops.entrypoints.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.12.22,<0.13.0"]
