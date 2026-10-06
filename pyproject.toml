@@ -20,8 +20,89 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "import-linter>=2.15",
     "mypy>=2.4.0",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
     "ruff>=0.16.10",
 ]
+
+# ---------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle: basic style
+    "F",       # pyflakes: unused imports, undefined names
+    "I",       # import sorting
+    "N",       # naming conventions
+    "B",       # bugbear: likely bugs
+    "UP",      # pyupgrade: modern Python syntax
+    "S",       # bandit: security problems
+    "C4",      # comprehensions
+    "SIM",     # simplifications
+    "PT",      # pytest style
+    "RUF",     # ruff-specific checks
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # assert is how pytest works
+
+[tool.ruff.lint.isort]
+known-first-party = ["mnist_mlops"]
+
+# ---------------------------------------------------------------- mypy
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+files = ["src", "tests"]
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+
+# ---------------------------------------------------------------- pytest + coverage
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--import-mode=importlib",
+    "--cov=mnist_mlops",
+    "--cov-report=term-missing",
+    "--cov-fail-under=90",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["mnist_mlops"]
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError", "\\.\\.\\."]
+
+# ---------------------------------------------------------------- import-linter
+[tool.importlinter]
+root_package = "mnist_mlops"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Layers only depend inward"
+type = "layers"
+layers = [
+    "mnist_mlops.entrypoints",
+    "mnist_mlops.infrastructure",
+    "mnist_mlops.application",
+    "mnist_mlops.domain",
+]
+
+[[tool.importlinter.contracts]]
+name = "Domain and application stay framework-free"
+type = "forbidden"
+source_modules = ["mnist_mlops.domain", "mnist_mlops.application"]
+forbidden_modules = ["pydantic", "pydantic_settings"]
