@@ -1,12 +1,13 @@
 .RECIPEPREFIX = >
 .DEFAULT_GOAL := help
-.PHONY: help install format lint typecheck contracts test check
+.PHONY: help install format lint typecheck contracts test check pre-commit
 
 help: ## Show available commands
-> @grep -E '^[a-z-]+:.*## ' Makefile | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
+> @grep -E '^[a-z-]+:.*## ' Makefile | awk -F':.*## ' '{printf "  %-11s %s\n", $$1, $$2}'
 
-install: ## Create .venv exactly from uv.lock
+install: ## Create .venv from uv.lock and install git hooks
 > uv sync --locked
+> uv run pre-commit install
 
 format: ## Auto-format code and auto-fix lint issues
 > uv run ruff format .
@@ -25,4 +26,7 @@ contracts: ## Check the clean-architecture layer rules
 test: ## Run tests with coverage (fails under 90%)
 > uv run pytest
 
-check: lint typecheck contracts test ## Run everything CI runs
+check: lint typecheck contracts test ## Run everything CI runs on Python code
+
+pre-commit: ## Run every pre-commit hook on all files
+> uv run pre-commit run --all-files
