@@ -8,8 +8,8 @@ with infrastructure as code, data and model versioning, CI/CD, and monitoring.
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Foundations: AWS security baseline, budgets, tooling, repo | In progress |
-| 1 | Repo scaffolding and first CI | Not started |
+| 0 | Foundations: AWS security baseline, budgets, tooling, repo | Done |
+| 1 | Repo scaffolding, code quality and CI | Done |
 | 2 | Infra foundations as code | Not started |
 | 3 | Data versioning and validation | Not started |
 | 4 | NumPy MLP from scratch | Not started |
@@ -20,15 +20,15 @@ with infrastructure as code, data and model versioning, CI/CD, and monitoring.
 | 9 | Observability | Not started |
 | 10 | Wrap-up and rebuild-from-code | Not started |
 
-## Ground rules
+## Quick start
 
-- No secrets, access keys, or AWS account IDs in this repository.
-- All AWS resources are created from code and can be destroyed and recreated.
-- Every significant decision is recorded in `docs/adr/`.
+```bash
+make install               # create .venv from uv.lock, install git hooks
+make check                 # lint, types, architecture rules, tests
+uv run mnist-mlops info    # print build info as JSON
+```
 
-## Local prerequisites
+## Code layout
 
-WSL2 (Ubuntu 24.04), Docker Desktop with WSL integration, AWS CLI v2.32+,
-uv with Python 3.12, Terraform 1.11+, GitHub CLI.
-
-AWS access uses short-lived credentials from `aws login --profile mnist`.
+`src/mnist_mlops` follows clean architecture ([ADR-0005](docs/adr/0005-clean-architecture.md)).
+Dependencies point inward only, and CI enforces it.
